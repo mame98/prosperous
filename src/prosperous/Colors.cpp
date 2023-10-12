@@ -1,5 +1,6 @@
 #include "Colors.hpp"
 
+#include <cstdint>
 #include <exception>
 #include <stdexcept>
 
@@ -291,10 +292,10 @@ namespace prosperous {
 
         constexpr float SQR(float x) {return x * x;}
 
-        u_int8_t get_closest_vt100_16_value(u_int8_t color_code) {
+        uint8_t get_closest_vt100_16_value(uint8_t color_code) {
 
             float closest = 10000000;
-            u_int8_t closest_color = color_code;
+            uint8_t closest_color = color_code;
             for(int i = 0; i < 16; ++i) {
                 float dist = SQR((float)colors[i].rgb.red - (float)colors[color_code].rgb.red)
                             + SQR((float)colors[i].rgb.green - (float)colors[color_code].rgb.green)
