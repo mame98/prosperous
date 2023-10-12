@@ -45,7 +45,7 @@ int main() {
     for(int i = 0; i < 32; ++i) {
         for(int j = 0; j < 80; ++j) {
 
-            prosperous::Color fg{"", {(u_int8_t)(255/32*i), (u_int8_t)(255/80*j), 54}, 0};
+            prosperous::Color fg{"", {(uint8_t)(255/32*i), (uint8_t)(255/80*j), 54}, 0};
             std::cout << prosperous::colorize_string("█", prosperous::ColorMode::TRUE_COLOR_24BIT, fg, prosperous::NamedColors::Black);
         }
         std::cout << "\n";

@@ -2,6 +2,7 @@
 #define PROSPEROUS_COLORS_HPP
 
 #include <array>
+#include <cstdint>
 #include <string>
 
 namespace prosperous {
@@ -15,15 +16,15 @@ namespace prosperous {
     };
 
     struct RGBValue {
-        u_int8_t red;
-        u_int8_t green;
-        u_int8_t blue;
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
     };
 
     struct Color {
         const char* name;
         RGBValue rgb;
-        u_int8_t vt100_color_code;
+        uint8_t vt100_color_code;
     };
 
     extern const std::array<Color, 256> colors;
