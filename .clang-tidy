@@ -1,0 +1,13 @@
+---
+Checks:              '-*,bugprone-*,readability-*,performance-*,portability-*,modernize-*,cppcoreguidelines-*,misc-*,-readability-magic-numbers,performance-*,-bugprone-easily-swappable-parameters,-modernize-use-trailing-return-type'
+WarningsAsErrors:    '*'
+CheckOptions:
+  - key: readability-identifier-length.IgnoredVariableNames
+    value: 'PI|id'
+  - key: readability-identifier-length.IgnoredParameterNames
+    value: 'PI|id'
+  - key: cppcoreguidelines-avoid-magic-numbers.IgnoredFloatingPointValues
+    value: 1.0;100.0;2.0;180.0
+  - key: cppcoreguidelines-avoid-magic-numbers.IgnoredIntegerValues
+    value: 0;1;2;3;4;1e3;1e6;1e9
+...
