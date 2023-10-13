@@ -309,71 +309,100 @@ namespace prosperous {
             return closest_color;
         }
 
-        std::string colorize_string_vt100_8(std::string value, Color foreground, Color background) {
-            auto foreground_code = foreground.vt100_color_code;
-            auto background_code = background.vt100_color_code;
-            if(foreground_code > 15) {
-                foreground_code = get_closest_vt100_16_value(foreground_code);
-            }
-            if(background_code > 15) {
-                background_code = get_closest_vt100_16_value(background_code);
-            }
-            foreground_code = foreground_code % 8;
-            background_code = background_code % 8;
+        std::string colorize_string_vt100_8(std::string value, std::optional<Color> foreground, std::optional<Color> background) {
+            std::string foreground_prefix{};
+            std::string background_prefix{};
 
-            auto foreground_prefix = "\033[3" + std::to_string(foreground_code) + "m";
-            auto background_prefix = "\033[4" + std::to_string(background_code) + "m";;
-            auto prefix = foreground_prefix + background_prefix;
-            auto postfix = "\033[39m\033[49m";
-            return prefix + value + postfix;
-        }
-
-        std::string colorize_string_vt100_16(std::string value, Color foreground, Color background) {
-            auto foreground_code = foreground.vt100_color_code;
-            auto background_code = background.vt100_color_code;
-            if(foreground_code > 15) {
-                foreground_code = get_closest_vt100_16_value(foreground_code);
-            }
-            if(background_code > 15) {
-                background_code = get_closest_vt100_16_value(background_code);
-            }
-
-            std::string foreground_prefix;
-            if(foreground_code <= 7) {
+            if(foreground.has_value()) {
+                auto foreground_code = foreground->vt100_color_code;
+                if(foreground_code > 15) {
+                    foreground_code = get_closest_vt100_16_value(foreground_code);
+                }
+                foreground_code = foreground_code % 8;
                 foreground_prefix = "\033[3" + std::to_string(foreground_code) + "m";
-            } else {
-                foreground_prefix = "\033[9" + std::to_string(foreground_code % 8) + "m";
             }
 
-            std::string background_prefix;
-            if(background_code <= 7) {
-                background_prefix = "\033[4" + std::to_string(background_code) + "m";
-            } else {
-                background_prefix = "\033[10" + std::to_string(background_code % 8) + "m";
+            if(background.has_value()) {
+                auto background_code = background->vt100_color_code;
+                if (background_code > 15) {
+                    background_code = get_closest_vt100_16_value(background_code);
+                }
+                background_code = background_code % 8;
+                background_prefix = "\033[4" + std::to_string(background_code) + "m";;
+            }
+
+            auto prefix = foreground_prefix + background_prefix;
+            auto postfix = "\033[39m\033[49m";
+            return prefix + value + postfix;
+        }
+
+        std::string colorize_string_vt100_16(std::string value, std::optional<Color> foreground, std::optional<Color> background) {
+            std::string foreground_prefix{};
+            std::string background_prefix{};
+
+            if(foreground.has_value()) {
+                auto foreground_code = foreground->vt100_color_code;
+                if(foreground_code > 15) {
+                    foreground_code = get_closest_vt100_16_value(foreground_code);
+                }
+
+                if(foreground_code <= 7) {
+                    foreground_prefix = "\033[3" + std::to_string(foreground_code) + "m";
+                } else {
+                    foreground_prefix = "\033[9" + std::to_string(foreground_code % 8) + "m";
+                }
+            }
+
+            if(background.has_value()) {
+                auto background_code = background->vt100_color_code;
+                if (background_code > 15) {
+                    background_code = get_closest_vt100_16_value(background_code);
+                }
+
+                if(background_code <= 7) {
+                    background_prefix = "\033[4" + std::to_string(background_code) + "m";
+                } else {
+                    background_prefix = "\033[10" + std::to_string(background_code % 8) + "m";
+                }
+
+            }
+
+            auto prefix = foreground_prefix + background_prefix;
+            auto postfix = "\033[39m\033[49m";
+            return prefix + value + postfix;
+        }
+
+        std::string colorize_string_vt100_256(std::string value, std::optional<Color> foreground, std::optional<Color> background) {
+            std::string foreground_prefix{};
+            std::string background_prefix{};
+
+            if(foreground.has_value()) {
+                foreground_prefix = "\033[38;5;" + std::to_string(foreground->vt100_color_code) + "m";
+            }
+
+            if(background.has_value()) {
+                background_prefix = "\033[48;5;" + std::to_string(background->vt100_color_code) + "m";
             }
             auto prefix = foreground_prefix + background_prefix;
             auto postfix = "\033[39m\033[49m";
             return prefix + value + postfix;
         }
 
-        std::string colorize_string_vt100_256(std::string value, Color foreground, Color background) {
-            auto foreground_code = foreground.vt100_color_code;
-            auto background_code = background.vt100_color_code;
+        std::string colorize_string_truecolor(std::string value, std::optional<Color> foreground, std::optional<Color> background) {
 
-            auto foreground_prefix = "\033[38;5;" + std::to_string(foreground_code) + "m";
-            auto background_prefix = "\033[48;5;" + std::to_string(background_code) + "m";
-            auto prefix = foreground_prefix + background_prefix;
-            auto postfix = "\033[39m\033[49m";
-            return prefix + value + postfix;
-        }
+            std::string foreground_prefix{};
+            std::string background_prefix{};
 
-        std::string colorize_string_truecolor(std::string value, Color foreground, Color background) {
-            auto foreground_prefix = "\033[38;2;" + std::to_string(foreground.rgb.red) + ";"
-                                              + std::to_string(foreground.rgb.green)+ ";"
-                                              + std::to_string(foreground.rgb.blue) + "m";
-            auto background_prefix = "\033[48;2;" + std::to_string(background.rgb.red) + ";"
-                          + std::to_string(background.rgb.green)+ ";"
-                          + std::to_string(background.rgb.blue) + "m";
+            if(foreground.has_value()) {
+                foreground_prefix = "\033[38;2;" + std::to_string(foreground->rgb.red) + ";"
+                                    + std::to_string(foreground->rgb.green) + ";"
+                                    + std::to_string(foreground->rgb.blue) + "m";
+            }
+            if(background.has_value()) {
+                background_prefix = "\033[48;2;" + std::to_string(background->rgb.red) + ";"
+                                    + std::to_string(background->rgb.green) + ";"
+                                    + std::to_string(background->rgb.blue) + "m";
+            }
             auto prefix = foreground_prefix + background_prefix;
             auto postfix = "\033[39m\033[49m";
             return prefix + value + postfix;
@@ -381,7 +410,7 @@ namespace prosperous {
 
     }
 
-    std::string colorize_string(std::string value, ColorMode color_mode, Color foreground, Color background) {
+    std::string colorize_string(std::string value, ColorMode color_mode, std::optional<Color> foreground, std::optional<Color> background) {
 
         if(color_mode == ColorMode::MONOCHROME) {
             return value;
