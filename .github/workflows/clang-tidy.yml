@@ -1,0 +1,35 @@
+name: Clang Tidy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  clang-tidy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set reusable strings
+        # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Install codespell
+        shell: bash
+        run: sudo apt update && sudo apt upgrade -y
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -D CMAKE_CXX_CLANG_TIDY=clang-tidy
+          -S ${{ github.workspace }}
+
+      - name: Build with clang-tidy
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
+
