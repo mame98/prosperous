@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdint>
+#include <optional>
 #include <string>
 
 namespace prosperous {
@@ -29,7 +30,7 @@ namespace prosperous {
 
     extern const std::array<Color, 256> colors;
 
-    std::string colorize_string(std::string value, ColorMode color_mode, Color foreground, Color background);
+    std::string colorize_string(std::string value, ColorMode color_mode, std::optional<Color> foreground, std::optional<Color> background);
 
     namespace NamedColors {
         extern const Color Black;
