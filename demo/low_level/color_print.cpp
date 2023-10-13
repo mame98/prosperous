@@ -16,10 +16,11 @@ void print_color_view(prosperous::ColorMode mode) {
 int main() {
     for(int i = 0; i < 16; ++i) {
         std::cout << "color-code: " << i << "\n";
-        std::cout << prosperous::colorize_string("My Text (monochrome)!", prosperous::ColorMode::MONOCHROME, prosperous::colors[i], prosperous::NamedColors::Black) << "\n";
-        std::cout << prosperous::colorize_string("My Text (VT100-8)!", prosperous::ColorMode::VT100_8_COLORS, prosperous::colors[i], prosperous::NamedColors::Black) << "\n";
-        std::cout << prosperous::colorize_string("My Text (VT100-16)!", prosperous::ColorMode::VT100_16_COLORS, prosperous::colors[i], prosperous::NamedColors::Black) << "\n";
-        std::cout << prosperous::colorize_string("My Text (VT100-256)!", prosperous::ColorMode::VT100_256_COLORS, prosperous::colors[i], prosperous::NamedColors::Black) << "\n";
+        std::cout << prosperous::colorize_string("My Text (monochrome)!", prosperous::ColorMode::MONOCHROME, prosperous::colors[i], std::nullopt) << "\n";
+        std::cout << prosperous::colorize_string("My Text (VT100-8)!", prosperous::ColorMode::VT100_8_COLORS, prosperous::colors[i], std::nullopt) << "\n";
+        std::cout << prosperous::colorize_string("My Text (VT100-16)!", prosperous::ColorMode::VT100_16_COLORS, prosperous::colors[i], std::nullopt) << "\n";
+        std::cout << prosperous::colorize_string("My Text (VT100-256)!", prosperous::ColorMode::VT100_256_COLORS, prosperous::colors[i], std::nullopt) << "\n";
+        std::cout << prosperous::colorize_string("My Text (TrueColor)!", prosperous::ColorMode::TRUE_COLOR_24BIT, prosperous::colors[i], std::nullopt) << "\n";
         std::cout << "\n";
     }
 
@@ -46,7 +47,7 @@ int main() {
         for(int j = 0; j < 80; ++j) {
 
             prosperous::Color fg{"", {(uint8_t)(255/32*i), (uint8_t)(255/80*j), 54}, 0};
-            std::cout << prosperous::colorize_string("█", prosperous::ColorMode::TRUE_COLOR_24BIT, fg, prosperous::NamedColors::Black);
+            std::cout << prosperous::colorize_string("█", prosperous::ColorMode::TRUE_COLOR_24BIT, fg, std::nullopt);
         }
         std::cout << "\n";
     }
