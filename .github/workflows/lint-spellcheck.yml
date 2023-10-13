@@ -1,0 +1,35 @@
+name: Codespell Spellcheck
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-spellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set reusable strings
+        # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Install codespell
+        shell: bash
+        run: sudo apt update && sudo apt install -y codespell
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -D PROSPEROUS_ENABLE_SPELLCHECK=YES
+          -S ${{ github.workspace }}
+
+      - name: Test
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --target spellcheck
+

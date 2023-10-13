@@ -1,0 +1,10 @@
+[codespell]
+check-filenames =
+check-hidden =
+
+builtin = clear,rare,en-GB_to_en-US,informal,usage
+
+skip = */.git,*/vendor,*/cmake-build-*,.idea
+#ignore-words-list =
+
+count =
