@@ -19,6 +19,6 @@ int main() {
     text.add_markup(3,4, blue_markup);
     text.add_markup(8,12, blue_markup);
 
-    std::cout << text.render(prosperous::ColorMode::TRUE_COLOR_24BIT) << "\n";
+    std::cout << text.render(prosperous::ColorMode::MONOCHROME) << "\n";
     return 0;
 }
