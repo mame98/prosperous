@@ -13,6 +13,8 @@ add_library(prosperous
         src/prosperous/Console.hpp
         src/prosperous/Colors.hpp
         src/prosperous/Colors.cpp
+        src/prosperous/RichText.cpp
+        src/prosperous/RichText.hpp
 )
 target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/)
 
