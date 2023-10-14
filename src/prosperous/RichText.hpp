@@ -37,7 +37,7 @@ namespace prosperous {
         RichText(std::string text, TextMarkup markup) : text(std::move(text)), base_markup(markup) {}
         static RichText from_markup(std::string markup);
         void add_markup(size_t start, size_t end, TextMarkup markup);
-        [[nodiscard]] std::string render() const;
+        [[nodiscard]] std::string render(ColorMode color_mode) const;
     private:
         std::string text;
         TextMarkup base_markup{};

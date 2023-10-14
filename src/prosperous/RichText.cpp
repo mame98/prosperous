@@ -90,10 +90,10 @@ namespace prosperous {
 
     }
 
-    std::string RichText::render() const {
+    std::string RichText::render(ColorMode color_mode) const {
 
         if(markup_spans.empty()) {
-            return colorize_string(text, ColorMode::TRUE_COLOR_24BIT, base_markup.foreground, base_markup.background);
+            return colorize_string(text, color_mode, base_markup.foreground, base_markup.background);
         }
 
         auto merged_spans = compute_merged_spans(this->markup_spans);
@@ -101,7 +101,7 @@ namespace prosperous {
 
         std::string result{};
         for(const auto& subtext : subtexts) {
-            result += subtext.render();
+            result += subtext.render(color_mode);
         }
 
         return result;
