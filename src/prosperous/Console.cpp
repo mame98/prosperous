@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <utility>
 
+#include <sys/ioctl.h>
+
 namespace prosperous {
 
     namespace {
@@ -62,6 +64,23 @@ namespace prosperous {
         color_mode = ColorMode::MONOCHROME;
     }
 
+    void Console::autodetect_terminal_size() {
+        if(!is_terminal(output)) {
+            return;
+        }
+        struct winsize terminal_size{};
+        if(output.rdbuf() == std::cout.rdbuf()) {
+            ioctl(fileno(stdout), TIOCGWINSZ, &terminal_size);
+        }
+        else if(output.rdbuf() == std::cerr.rdbuf()) {
+            ioctl(fileno(stderr), TIOCGWINSZ, &terminal_size);
+        } else {
+            throw std::runtime_error{"not implemented"};
+        }
+        size.width = terminal_size.ws_col;
+        size.height = terminal_size.ws_row;
+    }
+
     void Console::set_terminal_color_mode(ColorMode mode) {
         color_mode = mode;
     }
@@ -71,12 +90,41 @@ namespace prosperous {
     }
 
     void Console::print(const RichText& rich_text) {
+
+        if(auto_resize) {
+            autodetect_terminal_size();
+        }
+
         auto formatted_text = rich_text.render(color_mode);
         output << formatted_text << "\n";
     }
 
     void Console::print(std::string string) {
         print(RichText{std::move(string)});
+    }
+
+    bool Console::get_auto_resize() const {
+        return auto_resize;
+    }
+
+    void Console::set_auto_resize(bool active) {
+        this->auto_resize = active;
+    }
+
+    void Console::set_size(Size new_size) {
+        this->size = new_size;
+    }
+
+    Size Console::get_size() const {
+        return size;
+    }
+
+    uint32_t Console::get_width() const {
+        return size.width;
+    }
+
+    uint32_t Console::get_height() const {
+        return size.height;
     }
 
 } // prosperous
