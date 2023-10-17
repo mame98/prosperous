@@ -5,7 +5,13 @@
 #include <algorithm>
 #include <utility>
 
+#include <prosperous/config.h>
+
+#if PROSPEROUS_PLATFORM_LINUX
 #include <sys/ioctl.h>
+#elif PROSPEROUS_PLATFORM_WINDOWS
+#include <windows.h>
+#endif
 
 namespace prosperous {
 
@@ -68,6 +74,7 @@ namespace prosperous {
         if(!is_terminal(output)) {
             return;
         }
+#if PROSPEROUS_PLATFORM_LINUX
         struct winsize terminal_size{};
         if(output.rdbuf() == std::cout.rdbuf()) {
             ioctl(fileno(stdout), TIOCGWINSZ, &terminal_size);
@@ -79,6 +86,12 @@ namespace prosperous {
         }
         size.width = terminal_size.ws_col;
         size.height = terminal_size.ws_row;
+#elif PROSPEROUS_PLATFORM_WINDOWS
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+        size.width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        size.height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+#endif
     }
 
     void Console::set_terminal_color_mode(ColorMode mode) {
