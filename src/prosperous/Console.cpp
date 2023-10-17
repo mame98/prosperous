@@ -1,6 +1,5 @@
 #include "Console.hpp"
 
-#include <unistd.h>
 #include <cstring>
 #include <algorithm>
 #include <utility>
@@ -9,8 +8,10 @@
 
 #if PROSPEROUS_PLATFORM_LINUX
 #include <sys/ioctl.h>
+#include <unistd.h>
 #elif PROSPEROUS_PLATFORM_WINDOWS
 #include <windows.h>
+#include <io.h>
 #endif
 
 namespace prosperous {
