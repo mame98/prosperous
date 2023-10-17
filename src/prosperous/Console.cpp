@@ -12,6 +12,9 @@
 #elif PROSPEROUS_PLATFORM_WINDOWS
 #include <windows.h>
 #include <io.h>
+
+#define STDOUT_FILENO _fileno(stdin)
+#define STDERR_FILENO _fileno(stderr)
 #endif
 
 namespace prosperous {
