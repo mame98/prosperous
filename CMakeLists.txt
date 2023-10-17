@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.18)
 project(prosperous)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -8,6 +8,17 @@ option(PROSPEROUS_ENABLE_SPELLCHECK "Enable spellcheck target, requires codespel
 
 include(Spellcheck)
 
+message(STATUS "Building for ${CMAKE_SYSTEM_NAME}")
+if(LINUX)
+    set(PROSPEROUS_PLATFORM_LINUX 1)
+    set(PROSPEROUS_PLATFORM_WINDOWS 0)
+elseif(WIN32)
+    set(PROSPEROUS_PLATFORM_LINUX 0)
+    set(PROSPEROUS_PLATFORM_WINDOWS 1)
+endif()
+
+configure_file(src/prosperous/config.h.in ${PROJECT_BINARY_DIR}/src/prosperous/config.h)
+
 add_library(prosperous
         src/prosperous/Console.cpp
         src/prosperous/Console.hpp
@@ -15,7 +26,8 @@ add_library(prosperous
         src/prosperous/Colors.cpp
         src/prosperous/RichText.cpp
         src/prosperous/RichText.hpp
+        ${PROJECT_BINARY_DIR}/src/prosperous/config.h
 )
-target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/)
+target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/ ${PROJECT_BINARY_DIR}/src/)
 
 add_subdirectory(demo)
