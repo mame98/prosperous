@@ -27,6 +27,8 @@ add_library(prosperous
         src/prosperous/RichText.cpp
         src/prosperous/RichText.hpp
         ${PROJECT_BINARY_DIR}/src/prosperous/config.h
+        src/prosperous/Meassurement.cpp
+        src/prosperous/Meassurement.hpp
 )
 target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/ ${PROJECT_BINARY_DIR}/src/)
 
