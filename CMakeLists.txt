@@ -32,4 +32,5 @@ add_library(prosperous
 )
 target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/ ${PROJECT_BINARY_DIR}/src/)
 
+add_subdirectory(vendor)
 add_subdirectory(demo)
