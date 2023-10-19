@@ -34,3 +34,6 @@ target_include_directories(prosperous PUBLIC ${PROJECT_SOURCE_DIR}/src/ ${PROJEC
 
 add_subdirectory(vendor)
 add_subdirectory(demo)
+
+enable_testing()
+add_subdirectory(test)
